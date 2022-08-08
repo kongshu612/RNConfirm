@@ -1,13 +1,18 @@
+
 import * as React from 'react';
 
 import { StyleSheet, View } from 'react-native';
-//import { ConfirmView } from 'react-native-confirm';
+import { PortalProvider } from 'react-native-confirm';
+import { Demo } from './demo';
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <PortalProvider>
+      <View style={styles.container}>
+        <Demo />
+      </View>
+    </PortalProvider>
 
-    </View>
   );
 }
 

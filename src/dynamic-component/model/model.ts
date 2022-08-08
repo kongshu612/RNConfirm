@@ -28,6 +28,7 @@ export interface ConfirmProps {
   cancel?: (closeMe: () => void) => void,
   dimissOnBackdropClick?: boolean;
   hideCancel?: boolean;
+  Dialog?: (typeof React.Component<any>) | (React.FC<any>);
 }
 
 export interface DynamicComponentProps {

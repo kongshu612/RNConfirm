@@ -8,9 +8,12 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "pods": "pod-install --quiet",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "start_devtools": "npx react-devtools"
   },
   "dependencies": {
+    "@rneui/base": "^4.0.0-rc.6",
+    "@rneui/themed": "^4.0.0-rc.6",
     "react": "17.0.2",
     "react-native": "0.68.2"
   },

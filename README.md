@@ -1,11 +1,15 @@
-# React Native Portal Support
+# React Native Confirm
 
 ## Features
 - programatic create components and refresh components
-- support for Confirm/Info/Warning out of box.
+- support for Confirm out of box.
 - multiple portalhost support.
 
 ## Usage
+- install package
+```
+npm install react-native-confirm --save
+```
 - Add the PortalProvider in the Entry Component, e.g App.
 ```tsx
 // assume we are in render function of App, Wrapper children under PortalProvider

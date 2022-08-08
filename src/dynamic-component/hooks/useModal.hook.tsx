@@ -37,10 +37,11 @@ export function useConfirm(portalHost?: string) {
     const closeMe = () => {
       close?.();
     }
+    const { Dialog = ConfirmDialog, dimissOnBackdropClick, ...rest } = param;
     let dynamicParam: DynamicComponentProps = {
-      Component: ConfirmDialog,
-      props: { ...param },
-      dimissOnBackdropClick: param.dimissOnBackdropClick,
+      Component: Dialog,
+      props: { ...rest },
+      dimissOnBackdropClick: dimissOnBackdropClick,
       closeMe,
     }
     let openRefer = open(<ModalWrapperComponnet {...dynamicParam} />);

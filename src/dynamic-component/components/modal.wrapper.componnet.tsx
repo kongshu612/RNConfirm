@@ -46,7 +46,7 @@ export const ConfirmDialog: React.FC<Omit<ConfirmProps, 'dimissOnBackdropClick'>
           typeof (okText) === 'string' ?
             <Button onPress={onOk} title={okText}
               titleStyle={[styles.fontBase]}
-              buttonStyle={[styles.buttonStyle]}
+              buttonStyle={[styles.buttonStyle, { backgroundColor: 'blue' }]}
               containerStyle={[styles.okButtonBackground]} /> :
             <TouchableWithoutFeedback onPress={onOk}>{okText}</TouchableWithoutFeedback>
         }
@@ -87,6 +87,6 @@ const styles = StyleSheet.create({
   },
   okButtonBackground: {
     borderRadius: 8,
-    backgroundColor: 'blue',
+    borderWidth: 0,
   }
 })
