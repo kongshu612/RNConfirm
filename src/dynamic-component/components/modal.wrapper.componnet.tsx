@@ -1,8 +1,8 @@
 import React from 'react';
-import { Dialog } from '@rneui/themed';
 import type { ConfirmProps, DynamicComponentProps } from '../model/model';
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Button } from '@rneui/themed';
+import Dialog from './dialog.component';
 
 
 
@@ -14,7 +14,7 @@ export const ModalWrapperComponnet: React.FC<DynamicComponentProps> = (params) =
     }
   }, [dimissOnBackdropClick, closeMe])
   return (
-    <Dialog isVisible={true} onBackdropPress={onBackdropClick}>
+    <Dialog visible={true} onDropbackPress={onBackdropClick}>
       <Component {...props} closeMe={closeMe} />
     </Dialog>
   );
