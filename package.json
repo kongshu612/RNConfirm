@@ -68,8 +68,6 @@
     "typescript": "^4.5.2"
   },
   "peerDependencies": {
-    "@rneui/base": "^4.0.0-rc.5",
-    "@rneui/themed": "^4.0.0-rc.5",
     "react": "*",
     "react-native": "*"
   },

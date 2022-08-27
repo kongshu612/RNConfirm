@@ -1,7 +1,6 @@
 import React from 'react';
 import type { ConfirmProps, DynamicComponentProps } from '../model/model';
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import { Button } from '@rneui/themed';
+import { Button, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import Dialog from './dialog.component';
 
 
@@ -44,21 +43,17 @@ export const ConfirmDialog: React.FC<Omit<ConfirmProps, 'dimissOnBackdropClick'>
       <View style={[styles.buttonContainerStyle]}>
         {
           typeof (okText) === 'string' ?
-            <Button onPress={onOk} title={okText}
-              titleStyle={[styles.fontBase]}
-              buttonStyle={[styles.buttonStyle, { backgroundColor: 'blue' }]}
-              containerStyle={[styles.okButtonBackground]} /> :
+            <Button onPress={onOk} title={okText} /> :
             <TouchableWithoutFeedback onPress={onOk}>{okText}</TouchableWithoutFeedback>
         }
         {
           !hideCancel &&
           (
             typeof (cancelText) === 'string' ?
-              <Button type='clear'
-                titleStyle={[styles.fontBase]}
-                buttonStyle={[styles.buttonStyle]}
-                onPress={onCancel} title={cancelText} /> :
-              <TouchableWithoutFeedback onPress={onCancel}>{cancelText}</TouchableWithoutFeedback>)
+              <TouchableOpacity onPress={onCancel} style={[styles.cancelContainerStyle]}>
+                <Text style={[styles.cancelButtonStyle]}>{cancelText}</Text>
+              </TouchableOpacity> :
+              <TouchableWithoutFeedback onPress={onCancel} style={[styles.cancelContainerStyle]}>{cancelText}</TouchableWithoutFeedback>)
         }
       </View>
     </View>
@@ -88,5 +83,13 @@ const styles = StyleSheet.create({
   okButtonBackground: {
     borderRadius: 8,
     borderWidth: 0,
+  },
+  cancelButtonStyle: {
+    textAlign: 'center',
+    margin: 5,
+    fontWeight: "500",
+  },
+  cancelContainerStyle: {
+    marginTop: 10,
   }
 })
