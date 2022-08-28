@@ -15,6 +15,6 @@ export const Demo: React.FC = () => {
   }
 
   return (
-    <TouchableOpacity onPress={go}><Text style={{ color: '#2089dc' }}>ClickMe</Text></TouchableOpacity>
+    <TouchableOpacity onPress={go}><Text style={{ color: '#2089dc' }}>Click Me to open confirm</Text></TouchableOpacity>
   );
 }
