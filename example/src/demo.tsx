@@ -1,5 +1,5 @@
-import { Button } from '@rneui/themed';
 import React from 'react';
+import { Text, TouchableOpacity } from 'react-native';
 import { useConfirm } from 'react-native-confirm';
 
 export const Demo: React.FC = () => {
@@ -15,6 +15,6 @@ export const Demo: React.FC = () => {
   }
 
   return (
-    <Button title='ClickMe' onPress={go} type='clear'></Button>
+    <TouchableOpacity onPress={go}><Text style={{ color: '#2089dc' }}>Click Me to open confirm</Text></TouchableOpacity>
   );
 }

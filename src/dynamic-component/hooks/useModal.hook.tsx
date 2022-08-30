@@ -1,14 +1,15 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { PortalDispatchContext } from '../model/portalContext';
-import { ConfirmProps, DynamicComponentProps, Root_PortalHost } from '../model/model';
-import { ConfirmDialog, ModalWrapperComponnet } from '../components/modal.wrapper.componnet';
+import { ConfirmProps, CustomComponentOptions, DynamicComponentProps, Root_PortalHost } from '../model/model';
+import { ModalWrapperComponent } from '../components/modal.wrapper.componnet';
+import { ConfirmDialog } from '../components/confirm-dialog.component';
 
 let globaluuid = 0;
 function getuuid() {
   return `uuid:${globaluuid++}`;
 }
 
-export function useModal(portalHost: string) {
+export function useModal(portalHost: string = Root_PortalHost) {
   const dispatch = React.useContext(PortalDispatchContext);
   const open = React.useCallback((item: ReactElement) => {
     if (dispatch == null) {
@@ -44,18 +45,46 @@ export function useConfirm(portalHost?: string) {
       dimissOnBackdropClick: dimissOnBackdropClick,
       closeMe,
     }
-    let openRefer = open(<ModalWrapperComponnet {...dynamicParam} />);
+    let openRef = open(<ModalWrapperComponent {...dynamicParam} />);
     const update = (param: ConfirmProps) => {
-      openRefer.update({
+      openRef.update({
         Component: ConfirmDialog,
         props: { ...param },
         dimissOnBackdropClick: param.dimissOnBackdropClick,
         closeMe,
       });
     }
-    close = openRefer.close;
+    close = openRef.close;
     return { close, update };
   }, [open]);
 
   return confirm;
+}
+
+export function useComponent(portalHost?: string) {
+  if (!portalHost) {
+    portalHost = Root_PortalHost;
+  }
+  const open = useModal(portalHost);
+  const OpenComponent = React.useCallback((chidren: ReactNode, options?: CustomComponentOptions) => {
+    let close: Function | null = null;
+    const closeMe = () => {
+      close?.();
+    }
+    let dynamicParam: DynamicComponentProps = {
+      closeMe,
+      ...(options || {})
+    }
+    let openRef = open(<ModalWrapperComponent {...dynamicParam}>{chidren}</ModalWrapperComponent>);
+    const update = (children: ReactNode, options?: CustomComponentOptions) => {
+      openRef.update({
+        ...(options || {}),
+        children,
+        closeMe,
+      });
+    }
+    close = openRef.close;
+    return { close, update };
+  }, [open]);
+  return OpenComponent;
 }

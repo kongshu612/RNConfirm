@@ -1,5 +1,6 @@
 import type React from "react";
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
+import type { StyleProp, ViewStyle } from "react-native";
 
 export interface PortalType {
   uuid: string;
@@ -32,10 +33,17 @@ export interface ConfirmProps {
 }
 
 export interface DynamicComponentProps {
-  Component: (typeof React.Component<any>) | (React.FC<any>);
-  props: any;
+  Component?: (typeof React.Component<any>) | (React.FC<any>);
+  props?: any;
   dimissOnBackdropClick?: boolean;
   closeMe: () => void;
+  children?: ReactNode;
+  containerStyle?: StyleProp<ViewStyle>;
+  overlayStyle?: StyleProp<ViewStyle>;
+  position?: 'center' | 'top' | 'bottom' | 'auto';
+  relativeToElementRef?: React.MutableRefObject<React.ReactNode>;
 }
+
+export type CustomComponentOptions = Pick<DynamicComponentProps, 'dimissOnBackdropClick' | 'containerStyle' | 'overlayStyle' | 'position' | 'relativeToElementRef'>;
 
 export const Root_PortalHost = '##RootPortalHost##';
