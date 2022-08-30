@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { PortalProvider } from 'react-native-confirm';
 import { Demo } from './demo';
 import { OpenComponent } from './openComponent';
+import { RefreshDemo } from './refreshDemo';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <View style={styles.container}>
         <Demo />
         <OpenComponent />
+        <RefreshDemo />
       </View>
     </PortalProvider>
 

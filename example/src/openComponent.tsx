@@ -6,7 +6,6 @@ import { useComponent } from 'react-native-confirm';
 
 export const OpenComponent: React.FC = () => {
   const open = useComponent();
-  const buttonRef = React.useRef(null);
   const openComponent = React.useCallback(() => {
     let componentRef: ReturnType<typeof open>;
     const confirm = () => {
@@ -20,10 +19,10 @@ export const OpenComponent: React.FC = () => {
         </View>
       </View>
     );
-    componentRef = open(component, { position: 'auto', relativeToElementRef: buttonRef });
+    componentRef = open(component, { position: 'bottom' });
   }, [open]);
   return (
-    <TouchableOpacity onPress={openComponent} style={{ marginTop: 20 }} ref={buttonRef}>
+    <TouchableOpacity onPress={openComponent} style={{ marginTop: 20 }} >
       <Text style={{ color: '#2089dc' }}>open component from bottom</Text>
     </TouchableOpacity>
   )
