@@ -7,6 +7,9 @@
 - position configurable for dynamic components, e.g. center,bottom,top,auto.
 - support for **Confirm Dialog** out of box.
 
+## Example Screenshot
+![Architechter_Graphic](https://kongshu612.github.io/RNConfirm/demo.gif)
+
 ## Installation And Usage
 - install package
 ```
@@ -28,7 +31,7 @@ xxx
 
 
 ## Example and API
-for detail examples, please refer to the example in the source code. Bellow give two classic usage.
+for detail examples, please refer to the  [**example**](https://github.com/kongshu612/RNConfirm/tree/main/example) in the source code. Bellow give two classic usage.
 ### Confirm Dialog usage
 call API to create confirm dialog before your process
 ```tsx
@@ -102,9 +105,12 @@ componentRef = open(component);
 ```
 
 ## Architechter Graphics
-![Architechter_Graphic](RNPortal.png?raw=true "Architechter_Graphic")
+![Architechter_Graphic](https://kongshu612.github.io/RNConfirm/RNPortal.png)
 
+## Support this package
+If you like this package, consider giving it a github star ⭐
 
+Also, PR's are welcome!
 
 
 
