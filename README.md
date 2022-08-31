@@ -13,7 +13,7 @@
 ## Installation And Usage
 - install package
 ```
-npm install react-native-confirm --save
+npm install rn-portal-confirm --save
 ```
 - Add the PortalProvider in the Entry Component, e.g App.
 ```tsx
@@ -35,7 +35,7 @@ for detail examples, please refer to the  [**example**](https://github.com/kongs
 ### Confirm Dialog usage
 call API to create confirm dialog before your process
 ```tsx
-import {useConfirm} from 'react-native-confirm';
+import {useConfirm} from 'rn-portal-confirm';
 const confirm = useConfirm();
 confirm({
       message: 'Are you sure to do something?',
@@ -85,7 +85,7 @@ Here is the some definition of the ConfirmProps
 ### Open Dynamic Components 
 we use `useComponent` to open a custom component in the Modal.
 ```tsx
-import { useComponent } from 'react-native-confirm';
+import { useComponent } from 'rn-portal-confirm';
 const open = useComponent();
 
 let componentRef: ReturnType<typeof open>;
