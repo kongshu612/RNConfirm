@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   dependencies: {
-    'react-native-confirm': {
+    'rn-portal-confirm': {
       root: path.join(__dirname, '..'),
     },
   },

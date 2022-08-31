@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Text, TouchableOpacity, View } from 'react-native';
-import { useComponent } from 'react-native-confirm';
+import { useComponent } from 'rn-portal-confirm';
 
 export const RefreshDialog: React.FC<{ text: string, confirm: () => void }> = ({ text, confirm }) => {
   return (
