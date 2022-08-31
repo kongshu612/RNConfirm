@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View } from 'react-native';
-import { PortalProvider } from 'react-native-confirm';
+import { PortalProvider } from 'rn-portal-confirm';
 import { Demo } from './demo';
 import { OpenComponent } from './openComponent';
 import { RefreshDemo } from './refreshDemo';

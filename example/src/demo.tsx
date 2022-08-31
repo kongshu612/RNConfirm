@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import { useConfirm } from 'react-native-confirm';
+import { useConfirm } from 'rn-portal-confirm';
 
 export const Demo: React.FC = () => {
   const confirm = useConfirm();
