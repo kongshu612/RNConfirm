@@ -11,6 +11,15 @@ function addOrUpdate(nodes: PortalType[], node: PortalType): PortalType[] {
   return nodes;
 }
 
+function update(nodes: PortalType[], node: PortalType): PortalType[] {
+  const { uuid } = node;
+  const index = nodes.findIndex(it => it.uuid === uuid);
+  if (index >= 0) {
+    nodes[index] = { ...node };
+  }
+  return nodes;
+}
+
 function removeNode(nodes: PortalType[], node: PortalType): PortalType[] {
   const { uuid } = node;
   const index = nodes.findIndex(it => it.uuid === uuid);
@@ -51,6 +60,7 @@ export function portalReducre(previousState: PortalRepo, param: DispatchActionPa
   switch (action) {
     case 'Upsert': updatedElements = addOrUpdate(updatedElements, item!); break;
     case 'Remove': updatedElements = removeNode(updatedElements, item!); break;
+    case 'Update': updatedElements = update(updatedElements, item!); break;
 
   }
   return { ...previousState, ...{ [portalHost]: updatedElements } };

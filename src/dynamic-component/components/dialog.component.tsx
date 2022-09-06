@@ -1,36 +1,60 @@
 import React from 'react';
-import { Dimensions, LayoutChangeEvent, Modal, Platform, Pressable, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { Dimensions, LayoutChangeEvent, Modal, Platform, Pressable, StyleSheet, View } from 'react-native';
+import type { IModalProps } from '../model';
 
 
-export interface IModalProps {
-  visible: boolean;
-  onDropbackPress?: () => void;
-  children?: React.ReactNode;
-  containerStyle?: StyleProp<ViewStyle>;
-  overlayStyle?: StyleProp<ViewStyle>;
-  position?: 'center' | 'top' | 'bottom' | 'auto';
-  relativeToElementRef?: React.MutableRefObject<React.ReactNode>;
-  relativePageY?: number;
+
+const calcluateY = (baseY: number, height: number, windowHeight: number) => {
+  let size = baseY + height;
+  if (size < windowHeight) {
+    return Math.round(baseY < 0 ? 0 : baseY);
+  } else {
+    size = windowHeight - height;
+    return size < 0 ? 0 : Math.round(size);
+  }
 }
+
+const calculateX = (baseX: number, width: number, windowWidth: number) => {
+  let size = baseX + width;
+  if (size < windowWidth) {
+    return Math.round(baseX < 0 ? 0 : baseX);
+  } else {
+    size = windowWidth - width;
+    return size < 0 ? 0 : Math.round(size);
+  }
+}
+
 const Dialog: React.FC<IModalProps> = (props) => {
-  let { visible, onDropbackPress, children, containerStyle = {}, overlayStyle = {}, position = 'center', relativeToElementRef, relativePageY } = props;
+  let { visible,
+    onDropbackPress,
+    children,
+    containerStyle = {},
+    overlayStyle = {},
+    drawBackStyle = {},
+    position = 'center',
+    relativeToElementRef,
+    relativePoint,
+    alignPoint } = props;
   let positionStyle = {};
-  const [top, setTop] = React.useState<number>(-1);
-  const { height: WINDOWHEIGHT } = Dimensions.get('window');
-  if (relativeToElementRef || relativePageY) {
+  const [align, setAlign] = React.useState<{ left: number, top: number } | null>(null);
+  const { height: WINDOWHEIGHT, width: WINDOWWIDTH } = Dimensions.get('window');
+  if (relativeToElementRef || relativePoint) {
     if (['center', 'top', 'bottom'].includes(position)) {
-      console.warn(`auto mode will be supported when relative element provided`);
       position = 'auto';
     }
+    if (!alignPoint) {
+      alignPoint = relativePoint ? 'center' : 'left';
+    }
   }
-  if (position === 'auto' && !relativeToElementRef && !relativePageY) {
-    console.error(`please provide the releative elemnet Ref when postion is auto`);
+  if (position === 'auto' && !relativeToElementRef && !relativePoint) {
+    console.warn(`please provide the releative elemnet Ref when postion is auto`);
     position = 'center';
   }
   const autoPositionStyle = React.useMemo(() => {
-    if (top !== -1) {
+    if (align) {
       return {
-        top: top,
+        left: align.left,
+        top: align.top,
         position: 'absolute',
       };
     } else {
@@ -38,41 +62,51 @@ const Dialog: React.FC<IModalProps> = (props) => {
         opacity: 0,
       }
     }
-  }, [top]);
+  }, [align]);
 
   switch (position) {
     case 'top': positionStyle = styles.top; break;
     case 'bottom': positionStyle = styles.bottom; break;
     case 'auto': positionStyle = autoPositionStyle; break;
   }
+
   const calcuateLayout = React.useCallback(async (event: LayoutChangeEvent) => {
-    const { x, y, width, height } = event.nativeEvent.layout;
-    console.log(`the x is ${x}, y is ${y} height is ${height}, width is ${width}`);
-    if (relativePageY) {
-      const size = relativePageY + height;
-      if (size < WINDOWHEIGHT) {
-        setTop(relativePageY);
-      } else {
-        setTop(Math.min(0, relativePageY - height));
+    console.log('invoke onlayout');
+    const { width, height } = event.nativeEvent.layout;
+    if (relativePoint) {
+      let { x: relativeX, y: relativeY } = relativePoint;
+      switch (alignPoint) {
+        case 'center': relativeX -= width / 2; break;
+        case 'right': relativeX -= width; break;
       }
+      let left = calculateX(relativeX, width, WINDOWWIDTH);
+      let top = calcluateY(relativeY, height, WINDOWHEIGHT);
+      setAlign({ left, top });
     } else if (relativeToElementRef?.current) {
       const result = new Promise<number[]>((resolve) => {
         (relativeToElementRef!.current as any).measureInWindow((...args: number[]) => resolve(args));
       });
-      let [, relativeY, , relativeHeight] = await result;
-      const size = relativeY! + relativeHeight! + height;
-      if (size < WINDOWHEIGHT) {
-        setTop(relativeY! + relativeHeight!);
-      } else {
-        setTop(Math.min(0, relativeY! - height));
+      let [relativeX, relativeY, , relativeHeight] = await result;
+      switch (alignPoint) {
+        case 'center': relativeX! -= width / 2; break;
+        case 'right': relativeX! -= width; break;
       }
+      let left = calculateX(relativeX!, width, WINDOWWIDTH);
+      let top = relativeY! + relativeHeight!;
+      if (top + height > WINDOWHEIGHT) {
+        top = relativeY! - height;
+        top = top < 0 ? 0 : top;
+      }
+      top = Math.round(top);
+      setAlign({ left, top });
     }
-  }, [WINDOWHEIGHT, setTop, relativeToElementRef?.current, relativePageY]);
+  }, [WINDOWHEIGHT, WINDOWHEIGHT, relativePoint, relativeToElementRef?.current, setAlign,]);
 
+  console.log(positionStyle);
 
   return (
     <Modal visible={visible} transparent onRequestClose={onDropbackPress}>
-      <Pressable onPress={onDropbackPress} style={styles.drawback} />
+      <Pressable onPress={onDropbackPress} style={[styles.drawback, drawBackStyle]} />
       <View style={[styles.container, containerStyle]}>
         <View style={[styles.overlay, positionStyle, overlayStyle]} onLayout={calcuateLayout}>
           {children}

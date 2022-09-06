@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, Text, TouchableOpacity, View } from 'react-native';
+import { Button, GestureResponderEvent, Text, TouchableOpacity, View } from 'react-native';
 import { useComponent } from 'rn-portal-confirm';
 
 
 
 export const OpenComponent: React.FC = () => {
   const open = useComponent();
-  const openComponent = React.useCallback(() => {
+  const openComponent = React.useCallback((event: GestureResponderEvent) => {
     let componentRef: ReturnType<typeof open>;
     const confirm = () => {
       componentRef?.close();

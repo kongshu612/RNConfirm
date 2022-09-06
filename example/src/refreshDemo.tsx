@@ -23,14 +23,14 @@ export const RefreshDemo: React.FC = () => {
     const confirm = () => {
       componentRef?.close();
     }
-    componentRef = open(<RefreshDialog text='Hello World' confirm={confirm} />, { position: 'auto', relativeToElementRef: buttonRef });
+    componentRef = open(<RefreshDialog text='Hello World' confirm={confirm} />, { relativeToElementRef: buttonRef });
     setTimeout(() => {
-      componentRef.update(<RefreshDialog text='Hello World Changed' confirm={confirm} />, { position: 'auto', relativeToElementRef: buttonRef });
+      componentRef.update(<RefreshDialog text='Hello World Changed' confirm={confirm} />, { relativeToElementRef: buttonRef });
     }, 3000)
   }, [open]);
   return (
     <TouchableOpacity onPress={openComponent} style={{ marginTop: 20 }} ref={buttonRef}>
-      <Text style={{ color: '#2089dc' }}>Refresh Modal Demo</Text>
+      <Text style={{ color: '#2089dc' }}>Refresh Modal Demo,Dialog Align to Button</Text>
     </TouchableOpacity>
   )
 }
