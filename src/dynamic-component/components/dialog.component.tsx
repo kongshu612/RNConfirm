@@ -10,19 +10,20 @@ export interface IModalProps {
   overlayStyle?: StyleProp<ViewStyle>;
   position?: 'center' | 'top' | 'bottom' | 'auto';
   relativeToElementRef?: React.MutableRefObject<React.ReactNode>;
+  relativePageY?: number;
 }
 const Dialog: React.FC<IModalProps> = (props) => {
-  let { visible, onDropbackPress, children, containerStyle = {}, overlayStyle = {}, position = 'center', relativeToElementRef } = props;
+  let { visible, onDropbackPress, children, containerStyle = {}, overlayStyle = {}, position = 'center', relativeToElementRef, relativePageY } = props;
   let positionStyle = {};
   const [top, setTop] = React.useState<number>(-1);
   const { height: WINDOWHEIGHT } = Dimensions.get('window');
-  if (relativeToElementRef) {
+  if (relativeToElementRef || relativePageY) {
     if (['center', 'top', 'bottom'].includes(position)) {
       console.warn(`auto mode will be supported when relative element provided`);
       position = 'auto';
     }
   }
-  if (position === 'auto' && !relativeToElementRef) {
+  if (position === 'auto' && !relativeToElementRef && !relativePageY) {
     console.error(`please provide the releative elemnet Ref when postion is auto`);
     position = 'center';
   }
@@ -47,7 +48,14 @@ const Dialog: React.FC<IModalProps> = (props) => {
   const calcuateLayout = React.useCallback(async (event: LayoutChangeEvent) => {
     const { x, y, width, height } = event.nativeEvent.layout;
     console.log(`the x is ${x}, y is ${y} height is ${height}, width is ${width}`);
-    if (relativeToElementRef?.current) {
+    if (relativePageY) {
+      const size = relativePageY + height;
+      if (size < WINDOWHEIGHT) {
+        setTop(relativePageY);
+      } else {
+        setTop(Math.min(0, relativePageY - height));
+      }
+    } else if (relativeToElementRef?.current) {
       const result = new Promise<number[]>((resolve) => {
         (relativeToElementRef!.current as any).measureInWindow((...args: number[]) => resolve(args));
       });
@@ -59,7 +67,7 @@ const Dialog: React.FC<IModalProps> = (props) => {
         setTop(Math.min(0, relativeY! - height));
       }
     }
-  }, [WINDOWHEIGHT, setTop]);
+  }, [WINDOWHEIGHT, setTop, relativeToElementRef?.current, relativePageY]);
 
 
   return (
