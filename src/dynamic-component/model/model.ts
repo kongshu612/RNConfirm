@@ -42,8 +42,9 @@ export interface DynamicComponentProps {
   overlayStyle?: StyleProp<ViewStyle>;
   position?: 'center' | 'top' | 'bottom' | 'auto';
   relativeToElementRef?: React.MutableRefObject<React.ReactNode>;
+  relativePageY?: number;
 }
 
-export type CustomComponentOptions = Pick<DynamicComponentProps, 'dimissOnBackdropClick' | 'containerStyle' | 'overlayStyle' | 'position' | 'relativeToElementRef'>;
+export type CustomComponentOptions = Pick<DynamicComponentProps, 'dimissOnBackdropClick' | 'containerStyle' | 'overlayStyle' | 'position' | 'relativeToElementRef' | 'relativePageY'>;
 
 export const Root_PortalHost = '##RootPortalHost##';
