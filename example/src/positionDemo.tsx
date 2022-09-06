@@ -10,9 +10,22 @@ export const PositionDemo: React.FC = () => {
     open(<Text>Hello Dialog</Text>, { relativePoint: { x, y }, drawBackStyle: { backgroundColor: 'transparent' } });
 
   }, [open]);
+
+  const openAbove = React.useCallback((event: GestureResponderEvent) => {
+    let { pageX: x, pageY: y } = event.nativeEvent;
+    open(<Text style={{ height: 300 }}>Hello Dialog</Text>, { relativePoint: { x, y }, drawBackStyle: { backgroundColor: 'transparent' } });
+
+  }, [open]);
   return (
-    <TouchableOpacity onPress={openComponent} style={{ marginTop: 20 }}>
-      <Text style={{ color: '#2089dc' }}>Dialog Open Align to Click Point</Text>
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity onPress={openComponent} style={{ marginTop: 20 }}>
+        <Text style={{ color: '#2089dc' }}>Dialog Open Align to Click Point</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={openAbove} style={{ marginTop: 20 }}>
+        <Text style={{ color: '#2089dc' }}>Dialog Open above the Click Point</Text>
+      </TouchableOpacity>
+    </>
+
   )
 }

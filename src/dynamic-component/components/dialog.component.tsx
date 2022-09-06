@@ -9,6 +9,10 @@ const calcluateY = (baseY: number, height: number, windowHeight: number) => {
   if (size < windowHeight) {
     return Math.round(baseY < 0 ? 0 : baseY);
   } else {
+    size = baseY - height;
+    if (size >= 0) {
+      return Math.round(size);
+    }
     size = windowHeight - height;
     return size < 0 ? 0 : Math.round(size);
   }
@@ -23,6 +27,8 @@ const calculateX = (baseX: number, width: number, windowWidth: number) => {
     return size < 0 ? 0 : Math.round(size);
   }
 }
+
+const positionGap = 5;
 
 const Dialog: React.FC<IModalProps> = (props) => {
   let { visible,
@@ -81,7 +87,13 @@ const Dialog: React.FC<IModalProps> = (props) => {
       }
       let left = calculateX(relativeX, width, WINDOWWIDTH);
       let top = calcluateY(relativeY, height, WINDOWHEIGHT);
-      setAlign({ left, top });
+      setAlign(pre => {
+        if (Math.abs(left - (pre?.left || 0)) > positionGap || Math.abs(top - (pre?.top || 0)) > positionGap) {
+          return { left, top };
+        } else {
+          return pre;
+        }
+      });
     } else if (relativeToElementRef?.current) {
       const result = new Promise<number[]>((resolve) => {
         (relativeToElementRef!.current as any).measureInWindow((...args: number[]) => resolve(args));
@@ -98,7 +110,13 @@ const Dialog: React.FC<IModalProps> = (props) => {
         top = top < 0 ? 0 : top;
       }
       top = Math.round(top);
-      setAlign({ left, top });
+      setAlign(pre => {
+        if (Math.abs(left - (pre?.left || 0)) > positionGap || Math.abs(top - (pre?.top || 0)) > positionGap) {
+          return { left, top };
+        } else {
+          return pre;
+        }
+      });
     }
   }, [WINDOWHEIGHT, WINDOWHEIGHT, relativePoint, relativeToElementRef?.current, setAlign,]);
 

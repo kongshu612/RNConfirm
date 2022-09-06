@@ -4,7 +4,7 @@ import { useComponent } from 'rn-portal-confirm';
 
 export const RefreshDialog: React.FC<{ text: string, confirm: () => void }> = ({ text, confirm }) => {
   return (
-    <View>
+    <View style={{ height: 300 }}>
       <Text>Hello, Note, Text Bellow will be changed after 3 seconds</Text>
       <Text style={{ color: 'red' }}>{text}</Text>
       <View style={{ marginTop: 20 }}>
