@@ -51,7 +51,7 @@ Remember to add tests for your change if possible. Run the unit tests by:
 ```sh
 yarn test
 ```
-To edit the Objective-C files, open `example/ios/ConfirmExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > react-native-confirm`.
+To edit the Objective-C files, open `example/ios/ConfirmExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > rn-portal-confirm`.
 
 To edit the Kotlin files, open `example/android` in Android studio and find the source files at `reactnativeconfirm` under `Android`.
 ### Commit message convention

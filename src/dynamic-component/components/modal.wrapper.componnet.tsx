@@ -4,14 +4,20 @@ import Dialog from './dialog.component';
 
 
 export const ModalWrapperComponent: React.FC<DynamicComponentProps> = (params) => {
-  const { Component, props = {}, dimissOnBackdropClick = true, closeMe, children, position, relativeToElementRef, relativePageY } = params;
+  const { Component,
+    props = {},
+    dimissOnBackdropClick = true,
+    closeMe,
+    children,
+    ...rest
+  } = params;
   const onBackdropClick = React.useCallback(() => {
     if (dimissOnBackdropClick) {
       closeMe();
     }
   }, [dimissOnBackdropClick, closeMe]);
   return (
-    <Dialog visible={true} onDropbackPress={onBackdropClick} position={position} relativeToElementRef={relativeToElementRef} relativePageY={relativePageY}>
+    <Dialog visible={true} onDropbackPress={onBackdropClick} {...rest}>
       {Component && <Component {...props} closeMe={closeMe} />}
       {children}
     </Dialog>

@@ -19,7 +19,7 @@ export function useModal(portalHost: string = Root_PortalHost) {
     const close = () => dispatch({ action: 'Remove', item: { uuid: uuid!, item }, portalHost });
     const update = (param: any) => {
       item = React.cloneElement(item, param);
-      dispatch({ action: 'Upsert', item: { uuid, item }, portalHost });
+      dispatch({ action: 'Update', item: { uuid, item }, portalHost });
     }
     dispatch({ action: 'Upsert', item: { uuid, item }, portalHost });
     return { close, update };

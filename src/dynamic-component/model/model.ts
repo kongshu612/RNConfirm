@@ -7,7 +7,7 @@ export interface PortalType {
   item: React.ReactNode;
 }
 
-export const Actions = ['Upsert', 'Remove', 'RegisterHost', 'UnRegisterHost'] as const;
+export const Actions = ['Upsert', 'Remove', 'Update', 'RegisterHost', 'UnRegisterHost'] as const;
 export type ActionTypes = typeof Actions[number];
 
 export interface DispatchActionParam {
@@ -32,6 +32,22 @@ export interface ConfirmProps {
   Dialog?: (typeof React.Component<any>) | (React.FC<any>);
 }
 
+const alignPoints = ['left', 'center', 'right'] as const;
+export type AlignPointType = typeof alignPoints[number];
+
+export interface IModalProps {
+  visible: boolean;
+  onDropbackPress?: () => void;
+  children?: React.ReactNode;
+  containerStyle?: StyleProp<ViewStyle>;
+  overlayStyle?: StyleProp<ViewStyle>;
+  drawBackStyle?: StyleProp<ViewStyle>;
+  position?: 'center' | 'top' | 'bottom' | 'auto';
+  relativeToElementRef?: React.MutableRefObject<React.ReactNode>;
+  relativePoint?: { x: number, y: number };
+  alignPoint?: AlignPointType;
+}
+
 export interface DynamicComponentProps {
   Component?: (typeof React.Component<any>) | (React.FC<any>);
   props?: any;
@@ -40,11 +56,13 @@ export interface DynamicComponentProps {
   children?: ReactNode;
   containerStyle?: StyleProp<ViewStyle>;
   overlayStyle?: StyleProp<ViewStyle>;
+  drawBackStyle?: StyleProp<ViewStyle>;
   position?: 'center' | 'top' | 'bottom' | 'auto';
   relativeToElementRef?: React.MutableRefObject<React.ReactNode>;
-  relativePageY?: number;
+  relativePoint?: { x: number, y: number };
+  alignPoint?: AlignPointType;
 }
 
-export type CustomComponentOptions = Pick<DynamicComponentProps, 'dimissOnBackdropClick' | 'containerStyle' | 'overlayStyle' | 'position' | 'relativeToElementRef' | 'relativePageY'>;
+export type CustomComponentOptions = Pick<DynamicComponentProps, 'dimissOnBackdropClick' | 'containerStyle' | 'overlayStyle' | 'drawBackStyle' | 'position' | 'relativeToElementRef' | 'relativePoint' | 'alignPoint'>;
 
 export const Root_PortalHost = '##RootPortalHost##';
