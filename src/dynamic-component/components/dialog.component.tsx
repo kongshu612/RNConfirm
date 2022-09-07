@@ -47,6 +47,7 @@ const Dialog: React.FC<IModalProps> = (props) => {
   const { widthPadding = 5, heightPadding = 20 } = screenPadding;
   const [align, setAlign] = React.useState<{ left: number, top: number } | null>(null);
   const alignRef = React.useRef<{ left: number, top: number } | null>(align);
+  const opacityRef = React.useRef<number>(0);
   alignRef.current = align;
   const { height: WINDOWHEIGHT, width: WINDOWWIDTH } = Dimensions.get('window');
   if (relativeToElementRef || relativePoint) {
@@ -61,19 +62,21 @@ const Dialog: React.FC<IModalProps> = (props) => {
     console.warn(`please provide the releative elemnet Ref when postion is auto`);
     position = 'center';
   }
+
   const autoPositionStyle = React.useMemo(() => {
     if (align) {
       return {
         left: align.left,
         top: align.top,
         position: 'absolute',
+        opacity: opacityRef.current,
       };
     } else {
       return {
         opacity: 0,
       }
     }
-  }, [align]);
+  }, [align, opacityRef.current]);
 
   switch (position) {
     case 'top': positionStyle = styles.top; break;
@@ -95,6 +98,9 @@ const Dialog: React.FC<IModalProps> = (props) => {
       let top = calcluateY(relativeY, height, WINDOWHEIGHT, heightPadding);
       if (Math.abs(left - (pre?.left || 0)) > positionGap || Math.abs(top - (pre?.top || 0)) > positionGap) {
         setAlign({ left, top });
+      } else if (opacityRef.current === 0) {
+        opacityRef.current = 1;
+        setAlign(pre);
       }
     } else if (relativeToElementRef?.current) {
       const result = new Promise<number[]>((resolve) => {
@@ -114,6 +120,9 @@ const Dialog: React.FC<IModalProps> = (props) => {
       top = Math.round(top);
       if (Math.abs(left - (pre?.left || 0)) > positionGap || Math.abs(top - (pre?.top || 0)) > positionGap) {
         setAlign({ left, top });
+      } else if (opacityRef.current === 0) {
+        opacityRef.current = 1;
+        setAlign(pre);
       }
     }
   }, [WINDOWHEIGHT, WINDOWHEIGHT, relativePoint, relativeToElementRef?.current, setAlign, widthPadding, heightPadding]);
