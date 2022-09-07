@@ -4,25 +4,31 @@ import type { IModalProps } from '../model';
 
 
 
-const calcluateY = (baseY: number, height: number, windowHeight: number) => {
-  let size = baseY + height;
+const calcluateY = (baseY: number, height: number, windowHeight: number, heightPadding: number = 20) => {
+  let size = baseY + height + heightPadding;
   if (size < windowHeight) {
-    return Math.round(baseY < 0 ? 0 : baseY);
+    return Math.round(baseY < 0 ? heightPadding : baseY);
   } else {
-    size = windowHeight - height;
-    return size < 0 ? 0 : Math.round(size);
+    size = baseY - height;
+    if (size >= heightPadding) {
+      return Math.round(size);
+    }
+    size = windowHeight - height - heightPadding;
+    return size < 0 ? heightPadding : Math.round(size);
   }
 }
 
-const calculateX = (baseX: number, width: number, windowWidth: number) => {
-  let size = baseX + width;
+const calculateX = (baseX: number, width: number, windowWidth: number, widthPadding: number = 5) => {
+  let size = baseX + width + widthPadding;
   if (size < windowWidth) {
-    return Math.round(baseX < 0 ? 0 : baseX);
+    return Math.round(baseX < 0 ? widthPadding : baseX);
   } else {
-    size = windowWidth - width;
-    return size < 0 ? 0 : Math.round(size);
+    size = windowWidth - width - widthPadding;
+    return size < 0 ? widthPadding : Math.round(size);
   }
 }
+
+const positionGap = 5;
 
 const Dialog: React.FC<IModalProps> = (props) => {
   let { visible,
@@ -34,9 +40,15 @@ const Dialog: React.FC<IModalProps> = (props) => {
     position = 'center',
     relativeToElementRef,
     relativePoint,
-    alignPoint } = props;
+    alignPoint,
+    screenPadding = {}
+  } = props;
   let positionStyle = {};
+  const { widthPadding = 5, heightPadding = 20 } = screenPadding;
   const [align, setAlign] = React.useState<{ left: number, top: number } | null>(null);
+  const alignRef = React.useRef<{ left: number, top: number } | null>(align);
+  const opacityRef = React.useRef<number>(0);
+  alignRef.current = align;
   const { height: WINDOWHEIGHT, width: WINDOWWIDTH } = Dimensions.get('window');
   if (relativeToElementRef || relativePoint) {
     if (['center', 'top', 'bottom'].includes(position)) {
@@ -50,19 +62,21 @@ const Dialog: React.FC<IModalProps> = (props) => {
     console.warn(`please provide the releative elemnet Ref when postion is auto`);
     position = 'center';
   }
+
   const autoPositionStyle = React.useMemo(() => {
     if (align) {
       return {
         left: align.left,
         top: align.top,
         position: 'absolute',
+        opacity: opacityRef.current,
       };
     } else {
       return {
         opacity: 0,
       }
     }
-  }, [align]);
+  }, [align, opacityRef.current]);
 
   switch (position) {
     case 'top': positionStyle = styles.top; break;
@@ -71,17 +85,23 @@ const Dialog: React.FC<IModalProps> = (props) => {
   }
 
   const calcuateLayout = React.useCallback(async (event: LayoutChangeEvent) => {
-    console.log('invoke onlayout');
-    const { width, height } = event.nativeEvent.layout;
+    const { width, height, x, y } = event.nativeEvent.layout;
+    console.log(`the popup element size is x:${x}, y:${y}, width:${width},height:${height}`);
+    const pre = alignRef.current;
     if (relativePoint) {
       let { x: relativeX, y: relativeY } = relativePoint;
       switch (alignPoint) {
         case 'center': relativeX -= width / 2; break;
         case 'right': relativeX -= width; break;
       }
-      let left = calculateX(relativeX, width, WINDOWWIDTH);
-      let top = calcluateY(relativeY, height, WINDOWHEIGHT);
-      setAlign({ left, top });
+      let left = calculateX(relativeX, width, WINDOWWIDTH, widthPadding);
+      let top = calcluateY(relativeY, height, WINDOWHEIGHT, heightPadding);
+      if (Math.abs(left - (pre?.left || 0)) > positionGap || Math.abs(top - (pre?.top || 0)) > positionGap) {
+        setAlign({ left, top });
+      } else if (opacityRef.current === 0) {
+        opacityRef.current = 1;
+        setAlign(pre ? { ...pre } : pre);
+      }
     } else if (relativeToElementRef?.current) {
       const result = new Promise<number[]>((resolve) => {
         (relativeToElementRef!.current as any).measureInWindow((...args: number[]) => resolve(args));
@@ -91,16 +111,21 @@ const Dialog: React.FC<IModalProps> = (props) => {
         case 'center': relativeX! -= width / 2; break;
         case 'right': relativeX! -= width; break;
       }
-      let left = calculateX(relativeX!, width, WINDOWWIDTH);
+      let left = calculateX(relativeX!, width, WINDOWWIDTH, widthPadding);
       let top = relativeY! + relativeHeight!;
-      if (top + height > WINDOWHEIGHT) {
+      if (top + height + heightPadding > WINDOWHEIGHT) {
         top = relativeY! - height;
-        top = top < 0 ? 0 : top;
+        top = top < 0 ? heightPadding : top;
       }
       top = Math.round(top);
-      setAlign({ left, top });
+      if (Math.abs(left - (pre?.left || 0)) > positionGap || Math.abs(top - (pre?.top || 0)) > positionGap) {
+        setAlign({ left, top });
+      } else if (opacityRef.current === 0) {
+        opacityRef.current = 1;
+        setAlign(pre ? { ...pre } : pre);
+      }
     }
-  }, [WINDOWHEIGHT, WINDOWHEIGHT, relativePoint, relativeToElementRef?.current, setAlign,]);
+  }, [WINDOWHEIGHT, WINDOWHEIGHT, relativePoint, relativeToElementRef?.current, setAlign, widthPadding, heightPadding]);
 
   console.log(positionStyle);
 

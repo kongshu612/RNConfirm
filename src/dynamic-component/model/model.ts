@@ -46,6 +46,7 @@ export interface IModalProps {
   relativeToElementRef?: React.MutableRefObject<React.ReactNode>;
   relativePoint?: { x: number, y: number };
   alignPoint?: AlignPointType;
+  screenPadding?: { widthPadding?: number, heightPadding?: number; };
 }
 
 export interface DynamicComponentProps {
@@ -61,8 +62,10 @@ export interface DynamicComponentProps {
   relativeToElementRef?: React.MutableRefObject<React.ReactNode>;
   relativePoint?: { x: number, y: number };
   alignPoint?: AlignPointType;
+  screenPadding?: { widthPadding?: number, heightPadding?: number; };
+
 }
 
-export type CustomComponentOptions = Pick<DynamicComponentProps, 'dimissOnBackdropClick' | 'containerStyle' | 'overlayStyle' | 'drawBackStyle' | 'position' | 'relativeToElementRef' | 'relativePoint' | 'alignPoint'>;
+export type CustomComponentOptions = Pick<DynamicComponentProps, 'dimissOnBackdropClick' | 'containerStyle' | 'overlayStyle' | 'drawBackStyle' | 'position' | 'relativeToElementRef' | 'relativePoint' | 'alignPoint' | 'screenPadding'>;
 
 export const Root_PortalHost = '##RootPortalHost##';
