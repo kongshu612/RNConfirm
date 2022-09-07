@@ -100,7 +100,7 @@ const Dialog: React.FC<IModalProps> = (props) => {
         setAlign({ left, top });
       } else if (opacityRef.current === 0) {
         opacityRef.current = 1;
-        setAlign(pre);
+        setAlign(pre ? { ...pre } : pre);
       }
     } else if (relativeToElementRef?.current) {
       const result = new Promise<number[]>((resolve) => {
@@ -122,7 +122,7 @@ const Dialog: React.FC<IModalProps> = (props) => {
         setAlign({ left, top });
       } else if (opacityRef.current === 0) {
         opacityRef.current = 1;
-        setAlign(pre);
+        setAlign(pre ? { ...pre } : pre);
       }
     }
   }, [WINDOWHEIGHT, WINDOWHEIGHT, relativePoint, relativeToElementRef?.current, setAlign, widthPadding, heightPadding]);
