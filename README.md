@@ -8,6 +8,7 @@
 - support for **Confirm Dialog** out of box.
 
 ## Example Screenshot
+![Architechter_Graphic](https://kongshu612.github.io/RNConfirm/anotherdemo.gif)<br/>
 ![Architechter_Graphic](https://kongshu612.github.io/RNConfirm/demo.gif)
 
 ## Installation And Usage
